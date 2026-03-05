@@ -4,9 +4,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: "Method not allowed" });
   }
 
-  try {
+  const { message } = req.body;
 
-    const { message } = req.body;
+  try {
 
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
@@ -15,7 +15,7 @@ export default async function handler(req, res) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "llama3-8b-8192",
+        model: "llama-3.1-8b-instant",
         messages: [
           { role: "user", content: message }
         ]
@@ -24,17 +24,8 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    console.log(data);
-
-    if (!data.choices) {
-      return res.status(500).json({
-        reply: "Groq API error",
-        debug: data
-      });
-    }
-
     res.status(200).json({
-      reply: data.choices[0].message.content
+      reply: data.choices?.[0]?.message?.content || "No response"
     });
 
   } catch (error) {
