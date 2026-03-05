@@ -8,14 +8,14 @@ export default async function handler(req, res) {
 
   try {
 
-    const response = await fetch("https://api.x.ai/v1/chat/completions", {
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${process.env.GROK_API_KEY}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "grok-beta",
+        model: "llama3-8b-8192",
         messages: [
           {
             role: "user",
@@ -34,4 +34,5 @@ export default async function handler(req, res) {
   } catch (error) {
     res.status(500).json({ error: "Server error" });
   }
+
 }
